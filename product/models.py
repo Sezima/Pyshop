@@ -24,14 +24,18 @@ class Product(models.Model):
         ('out of stock', 'OUT OF STOCK'),
         ('awaiting', 'AWAITING')
     )
-
-    def __str__(self) -> str:
-        return self.name
-
     name = models.CharField(max_length=155)
     status = models.CharField(choices=STATUS_CHOICES, max_length=20)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
     image = models.ImageField(upload_to='prod_images')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
+
+
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('detail', kwargs={'product_id': self.pk})
+
+    def __str__(self) -> str:
+        return self.name
 
